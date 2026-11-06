@@ -139,12 +139,13 @@ const DEF={
  hl1:'もっと',side:'こんな時代、月謝で\nストレスためてる\n場合じゃないから…',hl2:'“家計に優しい”',hl3:'塾を!',
  bLabel:'＼ MONEY特集 ／',bSub:'賢いママにはやっぱり理由があるんです',bMain:'CRAMSSY. LEADERSの塾選び!'
 };
-const LOGO_C=[['#d6e7a2','ライム'],['#f3c6cf','ピンク'],['#ffffff','白'],['#1f2a44','ネイビー']];
-const BG_C=[['#a3a9a6','グレー'],['#b9ad9e','ベージュ'],['#9fb0bd','ブルーグレー'],['#c9b9b5','モーヴ']];
+const LOGO_C=[['#d4dcb0','ライム'],['#f3c6cf','ピンク'],['#ffffff','白'],['#1f2a44','ネイビー']];
+const BG_C=[['#939a93','グレー'],['#b9ad9e','ベージュ'],['#9fb0bd','ブルーグレー'],['#c9b9b5','モーヴ']];
 
 const KEY='cramssy.v1';
 let S={d:{...DEF},logoC:LOGO_C[0][0],bgC:BG_C[0][0],guide:true};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)S={...S,...s,d:{...DEF,...s.d}};}catch(e){}
+if(S.logoC==='#d6e7a2')S.logoC=LOGO_C[0][0];if(S.bgC==='#a3a9a6')S.bgC=BG_C[0][0];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 let cut=null,cutT={s:1,x:0,y:0};
 
@@ -172,10 +173,10 @@ function fitSize(c,text,font,max,width){let s=max;for(let i=0;i<60;i++){c.font=f
 function drawBack(c){
   const bg=S.bgC;
   const g=c.createRadialGradient(W*0.55,H*0.42,80,W*0.5,H*0.5,H*0.8);
-  g.addColorStop(0,shade(bg,0.16));g.addColorStop(0.55,bg);g.addColorStop(1,shade(bg,-0.22));
+  g.addColorStop(0,shade(bg,0.07));g.addColorStop(0.6,bg);g.addColorStop(1,shade(bg,-0.12));
   c.fillStyle=g;c.fillRect(0,0,W,H);
   // studio floor falloff
-  const f=c.createLinearGradient(0,H*0.7,0,H);f.addColorStop(0,'rgba(0,0,0,0)');f.addColorStop(1,'rgba(0,0,0,.12)');c.fillStyle=f;c.fillRect(0,0,W,H);
+  const f=c.createLinearGradient(0,H*0.7,0,H);f.addColorStop(0,'rgba(0,0,0,0)');f.addColorStop(1,'rgba(20,28,20,.18)');c.fillStyle=f;c.fillRect(0,0,W,H);
   // logo: wide heavy, slightly tall
   const L=S.d.logo||'';c.save();c.font='200px "Archivo Black",sans-serif';LS(c,'-6px');
   const w=c.measureText(L).width||1;const sx=1036/w,sy=Math.min(sx*1.42,1.42);
