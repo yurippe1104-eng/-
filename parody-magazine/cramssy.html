@@ -1,0 +1,283 @@
+<title>CRAMSSY. 11月号</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&family=Noto+Sans+JP:wght@500;700&family=Pinyon+Script&family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap">
+<style>
+/* Layout: canvas cover preview on the left, layer exports + copy fields on the right. */
+:root{
+  --bg:#efeeea; --panel:#ffffff; --fg:#1f1f1c; --muted:#6b6b63; --line:#deddd6;
+  --accent:#5f7a1f; --accent-fg:#ffffff; --field:#f7f6f2;
+  --f-ui:'Zen Kaku Gothic New','Hiragino Sans','Noto Sans JP',sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141513; --panel:#1d1e1b; --fg:#eceee6; --muted:#a2a497; --line:#34362f;
+  --accent:#b9d36a; --accent-fg:#141513; --field:#171815; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#141513; --panel:#1d1e1b; --fg:#eceee6; --muted:#a2a497; --line:#34362f;
+  --accent:#b9d36a; --accent-fg:#141513; --field:#171815; color-scheme:dark }
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px}
+.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:24px;max-width:1120px;margin:0 auto;align-items:start}
+@media (max-width:820px){.app{grid-template-columns:minmax(0,1fr)}}
+.left{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:12px;align-items:center;min-width:0}
+@media (max-width:820px){.left{position:static}}
+#cv{display:block;width:auto;height:min(78vh,calc((100vw - 32px) * 16 / 9));max-width:100%;aspect-ratio:9/16;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.15),0 14px 36px rgba(0,0,0,.22);background:#999}
+.toggles{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);justify-content:center}
+.toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel h1{font-size:19px;margin:0}
+.panel h2{font-size:13px;margin:0;color:var(--muted);letter-spacing:.06em}
+.sec{display:flex;flex-direction:column;gap:10px}
+.hint{font-size:12.5px;color:var(--muted);line-height:1.65;margin:0}
+.layers{margin:0;padding-left:1.3em;font-size:13px;line-height:1.7}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:inherit;font-size:13.5px;font-weight:700;border-radius:10px;padding:10px 14px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.file{position:relative;overflow:hidden}.file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.colors{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;font-size:13px}
+.swatches{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{border-color:var(--fg)}
+.ctl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:center;font-size:12.5px;color:var(--muted)}
+.ctl input{width:100%;accent-color:var(--accent)}
+details.group{border-top:1px solid var(--line);padding-top:12px}
+details.group summary{cursor:pointer;font-weight:700;font-size:14px}
+.field{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.field label{font-size:12px;color:var(--muted)}
+.field textarea{font:inherit;font-size:14px;color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical;line-height:1.45}
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(8,8,6,.86);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  padding:calc(env(safe-area-inset-top,0px) + 16px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(16px,env(safe-area-inset-left,0px))}
+.overlay img{max-height:76vh;max-width:100%;border-radius:4px;background:repeating-conic-gradient(#bbb 0 25%,#eee 0 50%) 0 0/24px 24px}
+.overlay p{color:#f1f1ea;font-size:13px;margin:0;text-align:center}
+.overlay .btn{background:#fff;color:#111;border-color:#fff}
+</style>
+
+<div class="app">
+  <div class="left">
+    <canvas id="cv" width="1080" height="1920" aria-label="表紙のプレビュー"></canvas>
+    <div class="toggles">
+      <label><input type="checkbox" id="guide" checked> 人物の位置ガイド</label>
+    </div>
+  </div>
+
+  <aside class="panel">
+    <div class="sec">
+      <h1>CRAMSSY. 11月号</h1>
+      <p class="hint">女性誌風のパロディ表紙です。人物の写真はあとから自分で重ねる前提で、3枚に分けて書き出せます。</p>
+    </div>
+
+    <div class="sec">
+      <h2>書き出す</h2>
+      <div class="row">
+        <button class="btn primary" type="button" data-out="back">① 背景＋ロゴ</button>
+        <button class="btn primary" type="button" data-out="text">③ 文字だけ（透明）</button>
+        <button class="btn" type="button" data-out="all">完成見本</button>
+      </div>
+      <ol class="layers">
+        <li>いちばん下に「① 背景＋ロゴ」</li>
+        <li>その上に切り抜いた人物（頭をロゴに少しかぶせる）</li>
+        <li>いちばん上に「③ 文字だけ」</li>
+      </ol>
+      <p class="hint">CapCut などでこの順に重ねると、頭がロゴの手前に来て、見出しは服の上に乗ります。本物の表紙と同じ重なり方です。</p>
+    </div>
+
+    <div class="sec">
+      <h2>色</h2>
+      <div class="colors">
+        <span>ロゴ</span><div class="swatches" id="logoSw"></div>
+        <span>背景</span><div class="swatches" id="bgSw"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>切り抜き人物を試しに置く（任意）</h2>
+      <div class="row">
+        <span class="btn file">透過PNGを選ぶ<input type="file" id="cut" accept="image/png,image/webp,image/*" aria-label="切り抜き人物を選ぶ"></span>
+        <button class="btn" type="button" id="cutClear">外す</button>
+      </div>
+      <div class="ctl">
+        <label for="cs">大きさ</label><input type="range" id="cs" min="0.4" max="2" step="0.01" value="1">
+        <label for="cx">左右</label><input type="range" id="cx" min="-500" max="500" step="1" value="0">
+        <label for="cy">上下</label><input type="range" id="cy" min="-600" max="600" step="1" value="0">
+      </div>
+      <p class="hint">プレビューで位置を確かめるためのものです。①と③の書き出しには入りません。完成見本には入ります。</p>
+    </div>
+
+    <div class="sec" id="fields"></div>
+  </aside>
+</div>
+
+<div class="overlay" id="modal" hidden>
+  <img id="outImg" alt="書き出した画像">
+  <p id="outNote">画像を長押し（パソコンは右クリック）して保存してください。</p>
+  <button class="btn" type="button" id="close">閉じる</button>
+</div>
+
+<script>
+(function(){
+const W=1080,H=1920;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+
+const FIELDS=[
+ ['ロゴまわり',[['tagline','いちばん上のコピー'],['logo','雑誌名'],['month','月・年（英語）'],['num','号数'],['kana','雑誌名のよみ'],['fine','号数の下の小さな文字']]],
+ ['左の見出し',[['script','筆記体'],['e1pre','1 前置き（小）'],['e1','1 見出し　*ではさむと筆記体*'],['e2pre','2 前置き（小）'],['e2','2 見出し'],['e3pre','3 前置き（小）'],['e3','3 見出し'],['e4pre','4 前置き（小）'],['e4','4 見出し']]],
+ ['メイン見出し',[['hl1','1行目'],['side','横の小さな文'],['hl2','2行目'],['hl3','3行目']]],
+ ['右下',[['bLabel','ラベル'],['bSub','小見出し'],['bMain','大見出し']]]
+];
+const DEF={
+ tagline:'“好かれる”子はいつだって、塾通い上手で心はリッチ。',
+ logo:'CRAMSSY.',month:'November 2026',num:'11',kana:'クラムッシィ',
+ fine:'毎月28日発売　第42巻第11号\n特別定価880円（本体800円）\n雑誌 12345-11',
+ script:'The Cover Story',
+ e1pre:'',e1:'教育ママ *meets*♥\n大人可愛いCRAMSSY.節約術',
+ e2pre:'この季節が来ると恋しくなる月謝の重み♥',e2:'パリシックな冬期講習で\n11月の家計簿Diary',
+ e3pre:'高いけど通いたい永遠の\n“定番塾”を今年っぽく',e3:'やっぱり、個別指導が好き。',
+ e4pre:'Interview',e4:'カリスマ塾長',
+ hl1:'もっと',side:'こんな時代、月謝で\nストレスためてる\n場合じゃないから…',hl2:'“家計に優しい”',hl3:'塾を!',
+ bLabel:'＼ MONEY特集 ／',bSub:'賢いママにはやっぱり理由があるんです',bMain:'CRAMSSY. LEADERSの塾選び!'
+};
+const LOGO_C=[['#d6e7a2','ライム'],['#f3c6cf','ピンク'],['#ffffff','白'],['#1f2a44','ネイビー']];
+const BG_C=[['#a3a9a6','グレー'],['#b9ad9e','ベージュ'],['#9fb0bd','ブルーグレー'],['#c9b9b5','モーヴ']];
+
+const KEY='cramssy.v1';
+let S={d:{...DEF},logoC:LOGO_C[0][0],bgC:BG_C[0][0],guide:true};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)S={...S,...s,d:{...DEF,...s.d}};}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let cut=null,cutT={s:1,x:0,y:0};
+
+/* ---------- helpers ---------- */
+function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
+  const f=v=>Math.max(0,Math.min(255,Math.round(amt<0?v*(1+amt):v+(255-v)*amt)));return `rgb(${f(r)},${f(g)},${f(b)})`;}
+const LS=(c,v)=>{if('letterSpacing' in c)c.letterSpacing=v;};
+let grain=null;
+function makeGrain(){const g=document.createElement('canvas');g.width=540;g.height=960;const x=g.getContext('2d');const im=x.createImageData(540,960);
+  for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=22;}x.putImageData(im,0,0);return g;}
+
+/* rich line: *italic* segments in Bodoni italic, logo word in Archivo */
+function richSegs(line){const out=[];line.split(/(\*[^*]+\*)/).forEach(p=>{if(!p)return;
+  if(p[0]==='*'&&p.length>2)out.push({t:p.slice(1,-1),k:'it'});
+  else{const L=S.d.logo;if(L&&p.includes(L)){p.split(L).forEach((q,i,a)=>{if(q)out.push({t:q,k:'n'});if(i<a.length-1)out.push({t:L,k:'logo'});});}else out.push({t:p,k:'n'});}});return out;}
+function segFont(k,size,base){return k==='it'?`italic 500 ${size*0.92}px "Bodoni Moda",serif`:k==='logo'?`${size*0.86}px "Archivo Black",sans-serif`:base;}
+function richWidth(c,line,size,base){let w=0;richSegs(line).forEach(s=>{c.font=segFont(s.k,size,base);w+=c.measureText(s.t).width;});return w;}
+function drawRich(c,line,x,y,size,base,align){
+  let w=richWidth(c,line,size,base);let cx=align==='right'?x-w:x;
+  richSegs(line).forEach(s=>{c.font=segFont(s.k,size,base);c.textAlign='left';c.fillText(s.t,cx,y);cx+=c.measureText(s.t).width;});
+}
+function fitSize(c,text,font,max,width){let s=max;for(let i=0;i<60;i++){c.font=font(s);if(c.measureText(text).width<=width)break;s*=0.97;}return s;}
+
+/* ---------- layers ---------- */
+function drawBack(c){
+  const bg=S.bgC;
+  const g=c.createRadialGradient(W*0.55,H*0.42,80,W*0.5,H*0.5,H*0.8);
+  g.addColorStop(0,shade(bg,0.16));g.addColorStop(0.55,bg);g.addColorStop(1,shade(bg,-0.22));
+  c.fillStyle=g;c.fillRect(0,0,W,H);
+  // studio floor falloff
+  const f=c.createLinearGradient(0,H*0.7,0,H);f.addColorStop(0,'rgba(0,0,0,0)');f.addColorStop(1,'rgba(0,0,0,.12)');c.fillStyle=f;c.fillRect(0,0,W,H);
+  // logo: wide heavy, slightly tall
+  const L=S.d.logo||'';c.save();c.font='200px "Archivo Black",sans-serif';LS(c,'-6px');
+  const w=c.measureText(L).width||1;const sx=1036/w,sy=Math.min(sx*1.42,1.42);
+  c.translate(22,318);c.scale(sx,sy);c.fillStyle=S.logoC;c.textBaseline='alphabetic';c.textAlign='left';c.fillText(L,0,0);c.restore();LS(c,'0px');
+  c.globalCompositeOperation='overlay';c.drawImage(grain||(grain=makeGrain()),0,0,W,H);c.globalCompositeOperation='source-over';
+}
+function drawText(c){
+  const d=S.d,cream='#f5f3ea',lime=S.logoC==='#1f2a44'||S.logoC==='#ffffff'?'#eef0e2':S.logoC,soft='rgba(0,0,0,.22)';
+  const M=(w,s)=>`${w} ${s}px "Shippori Mincho B1",serif`;
+  c.textBaseline='alphabetic';
+  const sh=(b)=>{c.shadowColor=soft;c.shadowBlur=b;c.shadowOffsetY=1;};const nosh=()=>{c.shadowColor='transparent';c.shadowBlur=0;c.shadowOffsetY=0;};
+
+  // tagline
+  sh(4);c.fillStyle=lime;c.font=M(700,27);LS(c,'1px');c.textAlign='left';
+  const ts=fitSize(c,d.tagline,s=>M(700,s),27,1000);c.font=M(700,ts);c.fillText(d.tagline,40,64);LS(c,'0px');
+
+  // issue block (right)
+  c.textAlign='right';c.fillStyle='#eef1e3';
+  c.font='italic 500 27px "Bodoni Moda",serif';c.fillText(d.month,1050,372);
+  c.font='700 132px "Bodoni Moda",serif';c.fillText(d.num,1052,494);const nw=c.measureText(d.num).width;
+  c.font=M(700,24);c.fillText(d.kana,1052-nw-16,484);
+  nosh();c.fillStyle='rgba(240,243,230,.78)';c.font='500 14px "Noto Sans JP",sans-serif';
+  d.fine.split('\n').forEach((l,i)=>c.fillText(l,1050,528+i*21));
+
+  // left cover lines
+  sh(6);c.textAlign='left';let y=640;
+  c.save();c.translate(52,y);c.rotate(-0.16);c.fillStyle=lime;c.font='50px "Pinyon Script",cursive';c.fillText(d.script,0,0);c.restore();
+  y+=70;
+  [['e1pre','e1'],['e2pre','e2'],['e3pre','e3'],['e4pre','e4']].forEach(([p,m])=>{
+    if(d[p]){c.fillStyle=lime;const isLatin=/^[\x20-\x7e]+$/.test(d[p]);
+      d[p].split('\n').forEach(l=>{c.font=isLatin?'italic 500 25px "Bodoni Moda",serif':M(700,22);LS(c,'1px');c.fillText(l,62,y);LS(c,'0px');y+=29;});y+=2;}
+    c.fillStyle=cream;d[m].split('\n').forEach(l=>{const base=M(800,38);LS(c,'-1px');drawRich(c,l,60,y+30,38,base,'left');LS(c,'0px');y+=49;});
+    y+=24;
+  });
+
+  // main headline
+  sh(16);c.fillStyle='#ffffff';
+  const h1s=168;c.font=M(500,h1s);LS(c,'-6px');c.fillText(d.hl1,46,1400);const h1w=c.measureText(d.hl1).width;LS(c,'0px');
+  sh(6);c.fillStyle='#f1f2ea';c.font=M(800,36);LS(c,'2px');
+  d.side.split('\n').forEach((l,i)=>c.fillText(l,Math.min(46+h1w+28,640),1288+i*50));LS(c,'0px');
+  sh(16);c.fillStyle='#ffffff';
+  // hanging opening quote
+  let hl2=d.hl2,q='';if(/^[“"「『]/.test(hl2)){q=hl2[0];hl2=hl2.slice(1);}
+  const s2=fitSize(c,hl2,s=>M(500,s),176,q?990:1020);c.font=M(500,s2);LS(c,'-5px');
+  if(q){c.save();c.font=M(500,s2*0.75);c.fillText(q==='"'?'“':q,8,1600-s2*0.3);c.restore();c.font=M(500,s2);LS(c,'-5px');}
+  c.fillText(hl2,q?70:40,1600);LS(c,'0px');
+  // line 3 with slanted "!"
+  const s3=190;let t3=d.hl3,bang='';if(/[!！]$/.test(t3)){bang='!';t3=t3.slice(0,-1);}
+  c.font=M(500,s3);LS(c,'-6px');c.fillText(t3,40,1800);const w3=c.measureText(t3).width;LS(c,'0px');
+  if(bang){c.save();c.translate(40+w3+18,1800);c.transform(1,0,-0.28,1,0,0);c.font=M(700,s3*0.95);c.fillText('!',0,0);c.restore();}
+
+  // bottom right feature
+  sh(8);c.textAlign='right';c.fillStyle='#ffffff';
+  c.font='700 25px "Noto Sans JP",sans-serif';LS(c,'3px');c.fillText(d.bLabel,1050,1716);LS(c,'0px');
+  c.font=M(800,24);c.fillText(d.bSub,1050,1756);
+  const bs=fitSize(c,d.bMain,s=>`700 ${s}px "Noto Sans JP",sans-serif`,48,560);
+  drawRich(c,d.bMain,1052,1822,bs,`700 ${bs}px "Noto Sans JP",sans-serif`,'right');
+  nosh();
+}
+function drawGuide(c){
+  c.save();c.globalAlpha=.5;c.fillStyle='rgba(255,255,255,.18)';c.strokeStyle='rgba(255,255,255,.9)';c.setLineDash([14,10]);c.lineWidth=3;
+  c.beginPath();c.ellipse(560,420,118,148,0,0,Math.PI*2);c.fill();c.stroke();
+  c.beginPath();c.moveTo(380,670);c.bezierCurveTo(430,570,700,560,760,670);c.lineTo(900,1250);c.bezierCurveTo(940,1600,900,1880,860,1920);c.lineTo(300,1920);c.bezierCurveTo(240,1600,300,1050,380,670);c.closePath();c.fill();c.stroke();
+  c.setLineDash([]);c.globalAlpha=.9;c.fillStyle='#fff';c.font='700 26px "Noto Sans JP",sans-serif';c.textAlign='center';
+  c.fillText('ここに切り抜き人物',720,1196);c.font='500 20px "Noto Sans JP",sans-serif';c.fillText('頭をロゴに少しかぶせると本物っぽくなります',720,1232);c.restore();
+}
+function drawCut(c){if(!cut)return;const s=Math.max(W/cut.width,H/cut.height)*0.92*cutT.s;const w=cut.width*s,h=cut.height*s;
+  c.drawImage(cut,(W-w)/2+cutT.x,H-h+cutT.y+40,w,h);}
+
+function compose(kind){
+  const c2=document.createElement('canvas');c2.width=W;c2.height=H;const x=c2.getContext('2d');
+  if(kind==='back')drawBack(x);
+  else if(kind==='text')drawText(x);
+  else{drawBack(x);if(cut)drawCut(x);else if(kind==='preview'&&S.guide)drawGuide(x);drawText(x);}
+  return c2;
+}
+let raf;function render(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{ctx.clearRect(0,0,W,H);ctx.drawImage(compose('preview'),0,0);});}
+
+/* ---------- UI ---------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.getElementById('fields').innerHTML='<h2>文字を変える</h2><p class="hint">改行するとそのまま行が変わります。</p>'+FIELDS.map(([g,fs],i)=>`<details class="group"${i===0?'':' open'}><summary>${g}</summary>${fs.map(([k,l])=>`<div class="field"><label for="f-${k}">${l}</label><textarea id="f-${k}" data-k="${k}" rows="${Math.max(1,String(S.d[k]).split('\n').length)}">${esc(S.d[k])}</textarea></div>`).join('')}</details>`).join('')+
+ '<div class="row"><button class="btn" type="button" id="reset">塾高すぎ問題の文に戻す</button></div>';
+document.getElementById('fields').addEventListener('input',e=>{const t=e.target;if(!t.dataset.k)return;S.d[t.dataset.k]=t.value;t.rows=Math.max(1,t.value.split('\n').length);save();render();});
+document.getElementById('reset').addEventListener('click',()=>{S.d={...DEF};document.querySelectorAll('[data-k]').forEach(t=>{t.value=S.d[t.dataset.k];t.rows=Math.max(1,t.value.split('\n').length);});save();render();});
+function swatches(id,list,key){const el=document.getElementById(id);
+  el.innerHTML=list.map(([c,n])=>`<button type="button" class="sw" style="background:${c}" data-c="${c}" aria-label="${n}" aria-pressed="${S[key]===c}"></button>`).join('');
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;S[key]=b.dataset.c;el.querySelectorAll('.sw').forEach(s=>s.setAttribute('aria-pressed',s===b));save();render();});}
+swatches('logoSw',LOGO_C,'logoC');swatches('bgSw',BG_C,'bgC');
+const guide=document.getElementById('guide');guide.checked=S.guide;guide.addEventListener('change',()=>{S.guide=guide.checked;save();render();});
+document.getElementById('cut').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const i=new Image();i.onload=()=>{cut=i;render();};i.src=URL.createObjectURL(f);e.target.value='';});
+document.getElementById('cutClear').addEventListener('click',()=>{cut=null;render();});
+[['cs','s'],['cx','x'],['cy','y']].forEach(([id,k])=>document.getElementById(id).addEventListener('input',e=>{cutT[k]=+e.target.value;render();}));
+const modal=document.getElementById('modal'),outImg=document.getElementById('outImg'),outNote=document.getElementById('outNote');
+document.querySelectorAll('[data-out]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.out;outImg.src=compose(k).toDataURL('image/png');
+  outNote.textContent=(k==='text'?'背景が透明な画像です（市松模様は透明の部分）。':'')+'画像を長押し（パソコンは右クリック）して保存してください。';
+  modal.hidden=false;}));
+document.getElementById('close').addEventListener('click',()=>{modal.hidden=true;});
+
+render();
+const fonts=['200px "Archivo Black"','500 40px "Shippori Mincho B1"','700 40px "Shippori Mincho B1"','800 40px "Shippori Mincho B1"','italic 500 40px "Bodoni Moda"','700 40px "Bodoni Moda"','50px "Pinyon Script"','700 20px "Noto Sans JP"','500 20px "Noto Sans JP"'];
+if(document.fonts){Promise.all(fonts.map(f=>document.fonts.load(f,'あCRAMSSY塾11'))).then(render,render);document.fonts.ready.then(render);}
+setTimeout(render,2000);
+})();
+</script>
