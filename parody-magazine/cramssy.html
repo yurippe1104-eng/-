@@ -139,13 +139,13 @@ const DEF={
  hl1:'もっと',side:'こんな時代、月謝で\nストレスためてる\n場合じゃないから…',hl2:'“家計に優しい”',hl3:'塾を!',
  bLabel:'＼ MONEY特集 ／',bSub:'賢いママにはやっぱり理由があるんです',bMain:'CRAMSSY. LEADERSの塾選び!'
 };
-const LOGO_C=[['#d4dcb0','ライム'],['#f3c6cf','ピンク'],['#ffffff','白'],['#1f2a44','ネイビー']];
-const BG_C=[['#939a93','グレー'],['#b9ad9e','ベージュ'],['#9fb0bd','ブルーグレー'],['#c9b9b5','モーヴ']];
+const LOGO_C=[['#d2e09e','ライム'],['#f3c6cf','ピンク'],['#ffffff','白'],['#1f2a44','ネイビー']];
+const BG_C=[['#879088','グレー'],['#b9ad9e','ベージュ'],['#9fb0bd','ブルーグレー'],['#c9b9b5','モーヴ']];
 
 const KEY='cramssy.v1';
 let S={d:{...DEF},logoC:LOGO_C[0][0],bgC:BG_C[0][0],guide:true};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)S={...S,...s,d:{...DEF,...s.d}};}catch(e){}
-if(S.logoC==='#d6e7a2')S.logoC=LOGO_C[0][0];if(S.bgC==='#a3a9a6')S.bgC=BG_C[0][0];
+if(['#d6e7a2','#d4dcb0'].includes(S.logoC))S.logoC=LOGO_C[0][0];if(['#a3a9a6','#939a93'].includes(S.bgC))S.bgC=BG_C[0][0];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 let cut=null,cutT={s:1,x:0,y:0};
 
@@ -155,7 +155,7 @@ function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255
 const LS=(c,v)=>{if('letterSpacing' in c)c.letterSpacing=v;};
 let grain=null;
 function makeGrain(){const g=document.createElement('canvas');g.width=540;g.height=960;const x=g.getContext('2d');const im=x.createImageData(540,960);
-  for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=22;}x.putImageData(im,0,0);return g;}
+  for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=14;}x.putImageData(im,0,0);return g;}
 
 /* rich line: *italic* segments in Bodoni italic, logo word in Archivo */
 function richSegs(line){const out=[];line.split(/(\*[^*]+\*)/).forEach(p=>{if(!p)return;
@@ -173,7 +173,7 @@ function fitSize(c,text,font,max,width){let s=max;for(let i=0;i<60;i++){c.font=f
 function drawBack(c){
   const bg=S.bgC;
   const g=c.createRadialGradient(W*0.55,H*0.42,80,W*0.5,H*0.5,H*0.8);
-  g.addColorStop(0,shade(bg,0.07));g.addColorStop(0.6,bg);g.addColorStop(1,shade(bg,-0.12));
+  g.addColorStop(0,shade(bg,0.04));g.addColorStop(0.6,bg);g.addColorStop(1,shade(bg,-0.12));
   c.fillStyle=g;c.fillRect(0,0,W,H);
   // studio floor falloff
   const f=c.createLinearGradient(0,H*0.7,0,H);f.addColorStop(0,'rgba(0,0,0,0)');f.addColorStop(1,'rgba(20,28,20,.18)');c.fillStyle=f;c.fillRect(0,0,W,H);
@@ -184,7 +184,7 @@ function drawBack(c){
   c.globalCompositeOperation='overlay';c.drawImage(grain||(grain=makeGrain()),0,0,W,H);c.globalCompositeOperation='source-over';
 }
 function drawText(c){
-  const d=S.d,cream='#f5f3ea',lime=S.logoC==='#1f2a44'||S.logoC==='#ffffff'?'#eef0e2':S.logoC,soft='rgba(0,0,0,.22)';
+  const d=S.d,cream='#f5f3ea',lime=S.logoC==='#1f2a44'||S.logoC==='#ffffff'?'#eef0e2':S.logoC,soft='rgba(0,0,0,.12)';
   const M=(w,s)=>`${w} ${s}px "Shippori Mincho B1",serif`;
   c.textBaseline='alphabetic';
   const sh=(b)=>{c.shadowColor=soft;c.shadowBlur=b;c.shadowOffsetY=1;};const nosh=()=>{c.shadowColor='transparent';c.shadowBlur=0;c.shadowOffsetY=0;};
@@ -207,20 +207,20 @@ function drawText(c){
   y+=70;
   [['e1pre','e1'],['e2pre','e2'],['e3pre','e3'],['e4pre','e4']].forEach(([p,m])=>{
     if(d[p]){c.fillStyle=lime;const isLatin=/^[\x20-\x7e]+$/.test(d[p]);
-      d[p].split('\n').forEach(l=>{c.font=isLatin?'italic 500 25px "Bodoni Moda",serif':M(700,22);LS(c,'1px');c.fillText(l,62,y);LS(c,'0px');y+=29;});y+=2;}
-    c.fillStyle=cream;d[m].split('\n').forEach(l=>{const base=M(800,38);LS(c,'-1px');drawRich(c,l,60,y+30,38,base,'left');LS(c,'0px');y+=49;});
+      d[p].split('\n').forEach(l=>{c.font=isLatin?'italic 500 25px "Bodoni Moda",serif':'700 21px "Noto Sans JP",sans-serif';LS(c,'1px');c.fillText(l,62,y);LS(c,'0px');y+=29;});y+=2;}
+    c.fillStyle=cream;d[m].split('\n').forEach(l=>{const base='700 37px "Noto Sans JP",sans-serif';LS(c,'-1px');drawRich(c,l,60,y+30,37,base,'left');LS(c,'0px');y+=49;});
     y+=24;
   });
 
   // main headline
   sh(16);c.fillStyle='#ffffff';
-  const h1s=168;c.font=M(500,h1s);LS(c,'-6px');c.fillText(d.hl1,46,1400);const h1w=c.measureText(d.hl1).width;LS(c,'0px');
-  sh(6);c.fillStyle='#f1f2ea';c.font=M(800,36);LS(c,'2px');
+  const h1s=168;c.font=M(500,h1s);LS(c,'-22px');c.fillText(d.hl1,46,1400);const h1w=c.measureText(d.hl1).width;LS(c,'0px');
+  sh(6);c.fillStyle='#f1f2ea';c.font='700 34px "Noto Sans JP",sans-serif';LS(c,'1px');
   d.side.split('\n').forEach((l,i)=>c.fillText(l,Math.min(46+h1w+28,640),1288+i*50));LS(c,'0px');
   sh(16);c.fillStyle='#ffffff';
   // hanging opening quote
   let hl2=d.hl2,q='';if(/^[“"「『]/.test(hl2)){q=hl2[0];hl2=hl2.slice(1);}
-  const s2=fitSize(c,hl2,s=>M(500,s),176,q?990:1020);c.font=M(500,s2);LS(c,'-5px');
+  const s2=fitSize(c,hl2,s=>M(500,s),176,q?990:1020);c.font=M(500,s2);LS(c,'-10px');
   if(q){c.save();c.font=M(500,s2*0.75);c.fillText(q==='"'?'“':q,8,1600-s2*0.3);c.restore();c.font=M(500,s2);LS(c,'-5px');}
   c.fillText(hl2,q?70:40,1600);LS(c,'0px');
   // line 3 with slanted "!"
@@ -231,13 +231,13 @@ function drawText(c){
   // bottom right feature
   sh(8);c.textAlign='right';c.fillStyle='#ffffff';
   c.font='700 25px "Noto Sans JP",sans-serif';LS(c,'3px');c.fillText(d.bLabel,1050,1716);LS(c,'0px');
-  c.font=M(800,24);c.fillText(d.bSub,1050,1756);
+  c.font='700 23px "Noto Sans JP",sans-serif';c.fillText(d.bSub,1050,1756);
   const bs=fitSize(c,d.bMain,s=>`700 ${s}px "Noto Sans JP",sans-serif`,48,560);
   drawRich(c,d.bMain,1052,1822,bs,`700 ${bs}px "Noto Sans JP",sans-serif`,'right');
   nosh();
 }
 function drawGuide(c){
-  c.save();c.globalAlpha=.5;c.fillStyle='rgba(255,255,255,.18)';c.strokeStyle='rgba(255,255,255,.9)';c.setLineDash([14,10]);c.lineWidth=3;
+  c.save();c.globalAlpha=.55;c.fillStyle='rgba(255,255,255,0)';c.strokeStyle='rgba(255,255,255,.9)';c.setLineDash([14,10]);c.lineWidth=3;
   c.beginPath();c.ellipse(560,420,118,148,0,0,Math.PI*2);c.fill();c.stroke();
   c.beginPath();c.moveTo(380,670);c.bezierCurveTo(430,570,700,560,760,670);c.lineTo(900,1250);c.bezierCurveTo(940,1600,900,1880,860,1920);c.lineTo(300,1920);c.bezierCurveTo(240,1600,300,1050,380,670);c.closePath();c.fill();c.stroke();
   c.setLineDash([]);c.globalAlpha=.9;c.fillStyle='#fff';c.font='700 26px "Noto Sans JP",sans-serif';c.textAlign='center';
