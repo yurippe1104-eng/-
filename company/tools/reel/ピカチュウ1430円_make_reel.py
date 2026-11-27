@@ -241,7 +241,7 @@ def end_frame(t):
     return fr.convert('RGB')
 
 # ---- 素材 ----
-cover = load(U + 'ddac4448-image.png').resize((W, H), Image.LANCZOS)
+cover = load(U + 'e67f51f0-image.png').resize((W, H), Image.LANCZOS)
 shelf = fit_with_blur_bg(load(U + '1d300ca2-image.jpg'))
 close_src = load(U + '1d300ca2-image.jpg')
 close = fit_with_blur_bg(close_src)
