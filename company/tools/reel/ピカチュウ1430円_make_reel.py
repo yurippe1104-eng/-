@@ -213,7 +213,7 @@ def float_hearts(fr, t, seed=0):
 AHA_BG = None
 def aha_frame(t):
     global AHA_BG
-    if AHA_BG is None: AHA_BG = polka()
+    if AHA_BG is None: AHA_BG = Image.blend(shelf, polka(), 0.62)
     fr = AHA_BG.copy().convert('RGBA')
     float_hearts(fr, t, 2)
     place(fr, AHA_1, W / 2, 470, pop(t, 0.0))
@@ -262,10 +262,10 @@ END_FOLLOW = pill('フォローして次の仕入れも見てね', 50, RED, (255
 _nf = ImageFont.truetype(MARU, 48)
 END_NAME = Image.new('RGBA', (600, 90), (0, 0, 0, 0))
 ImageDraw.Draw(END_NAME).text((300, 45), '◆ ジャンク姉さん ◆', font=_nf, fill=(255, 255, 255), anchor='mm', stroke_width=5, stroke_fill=(215, 40, 40))
-AHA_1 = pill('知らなければ', 60, (255, 255, 255), (130, 100, 115), pad=(50, 16))
-AHA_2 = big_text('ただの1,430円', 116, grad=((255, 255, 255), (225, 220, 228), (170, 160, 175)), outline=(120, 100, 115))
-AHA_3 = pill('知っていれば', 60, RED, (255, 255, 255), pad=(50, 16))
-AHA_4 = big_text('8,700円に！', 150)
+AHA_1 = pill('おなじピカチュウに見えても', 58, (255, 255, 255), TXT, pad=(50, 16))
+AHA_2 = big_text('値段はぜんぜん違う', 100, grad=((255, 255, 255), (240, 236, 225), (200, 190, 170)), outline=TXT)
+AHA_3 = pill('初期のぼくは', 60, RED, (255, 255, 255), pad=(50, 16))
+AHA_4 = big_text('価値 約6倍！', 150)
 
 # 写真の上での注目点（画面座標）: ズームの中心
 def to_screen(src_size, pt):
