@@ -6,6 +6,17 @@ U = '/root/.claude/uploads/9d075f31-d237-53b4-b8b2-c8963c2f70e1/'
 OUT = '/home/user/-/company/videos/キティ_オフハウス330円_リール.mp4'
 MARU = 'maru-ja.ttf'
 NAVY, BLUE, RED = (24, 40, 110), (40, 110, 230), (225, 20, 50)
+PINK, DPINK, TXT = (255, 120, 170), (232, 50, 120), (110, 60, 85)
+
+def heart(d, cx, cy, s, fill):
+    r = s * 0.3
+    d.ellipse((cx - 2 * r, cy - r * 1.4, cx, cy + r * 0.6), fill=fill)
+    d.ellipse((cx, cy - r * 1.4, cx + 2 * r, cy + r * 0.6), fill=fill)
+    d.polygon([(cx - 1.95 * r, cy - 0.1 * r), (cx + 1.95 * r, cy - 0.1 * r), (cx, cy + 2.1 * r)], fill=fill)
+
+def sparkle(d, cx, cy, s, fill):
+    d.polygon([(cx, cy - s), (cx + s * .25, cy - s * .25), (cx + s, cy), (cx + s * .25, cy + s * .25), (cx, cy + s), (cx - s * .25, cy + s * .25), (cx - s, cy), (cx - s * .25, cy - s * .25)], fill=fill)
+
 
 
 def load(p):
@@ -41,13 +52,16 @@ def bubble(lines, size=70, accent=None):
     im = Image.new('RGBA', (bw + 30, bh + 30), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     d.rounded_rectangle((12, 18, bw + 12, bh + 18), radius=46, fill=(0, 0, 0, 70))
-    d.rounded_rectangle((6, 6, bw + 6, bh + 6), radius=46, fill=(255, 255, 255, 250),
-                        outline=BLUE, width=10)
+    d.rounded_rectangle((6, 6, bw + 6, bh + 6), radius=56, fill=(255, 255, 255, 250),
+                        outline=PINK, width=9)
+    d.rounded_rectangle((20, 20, bw - 8, bh - 8), radius=44, outline=(255, 215, 230), width=3)
     y = 6 + 45
     for t, fo, b, h_ in zip(lines, fonts, sizes, lh):
         x = 6 + (bw - (b[2] - b[0])) // 2 - b[0]
-        d.text((x, y - b[1]), t, font=fo, fill=RED if fo is fa else NAVY)
+        d.text((x, y - b[1]), t, font=fo, fill=DPINK if fo is fa else TXT)
         y += h_ + gap
+    heart(d, bw - 4, 22, 46, DPINK)
+    sparkle(d, 30, bh - 4, 18, (255, 190, 215))
     return im
 
 
@@ -69,7 +83,7 @@ def endcard():
 
 DELA = 'dela-ja.ttf'
 
-def big_text(text, size, grad=((255, 250, 210), (255, 220, 40), (255, 150, 0)), outline=RED):
+def big_text(text, size, grad=((255, 248, 252), (255, 160, 200), (235, 60, 130)), outline=(200, 30, 100)):
     f = ImageFont.truetype(DELA, size)
     d0 = ImageDraw.Draw(Image.new('RGB', (1, 1)))
     b = d0.textbbox((0, 0), text, font=f, stroke_width=int(size * 0.16))
@@ -133,19 +147,29 @@ def ray_bg(c_top=(70, 150, 255), c_bot=(15, 60, 190), center=(W / 2, 760)):
                    (center[0] + 2500 * np.cos(a + .1), center[1] + 2500 * np.sin(a + .1))], fill=(255, 255, 255))
     return Image.blend(rays, base, .86)
 
-PROFIT_BG = ray_bg()
-CARD_ROWS = [('売れた値段', '5,980円', NAVY), ('仕入れ', '−330円', RED), ('送料', '−160円', RED), ('手数料（10%）', '−598円', RED)]
-TITLE_P = pill('結局いくら残った？', 64, RED, (255, 255, 255))
-LABEL_P = pill('利益', 62, (255, 255, 255), NAVY, pad=(70, 18))
+def polka(c_top=(255, 238, 245), c_bot=(255, 205, 225)):
+    g = np.linspace(0, 1, H)[:, None]
+    arr = np.array(c_top) * (1 - g) + np.array(c_bot) * g
+    im = Image.fromarray(np.repeat(arr[:, None, :], W, 1).astype(np.uint8).reshape(H, W, 3))
+    d = ImageDraw.Draw(im)
+    for row, y in enumerate(range(-40, H + 80, 110)):
+        for x in range(-40 + (55 if row % 2 else 0), W + 80, 110):
+            d.ellipse((x - 14, y - 14, x + 14, y + 14), fill=(255, 255, 255))
+    return im
+
+PROFIT_BG = polka()
+CARD_ROWS = [('売れた値段', '5,980円', TXT), ('仕入れ', '−330円', DPINK), ('送料', '−160円', DPINK), ('手数料（10%）', '−598円', DPINK)]
+TITLE_P = pill('いくら残ったと思う？', 64, DPINK, (255, 255, 255))
+LABEL_P = pill('利益', 62, (255, 255, 255), DPINK, pad=(70, 18))
 STAMP = None
 
 def make_stamp():
     im = Image.new('RGBA', (360, 360), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    d.ellipse((10, 10, 350, 350), fill=(255, 255, 255, 245), outline=RED, width=14)
-    d.ellipse((34, 34, 326, 326), outline=RED, width=4)
+    d.ellipse((10, 10, 350, 350), fill=(255, 255, 255, 245), outline=DPINK, width=14)
+    d.ellipse((34, 34, 326, 326), outline=PINK, width=4)
     f1 = ImageFont.truetype(MARU, 54); f2 = ImageFont.truetype(DELA, 96)
-    d.text((180, 120), '利益率', font=f1, fill=RED, anchor='mm')
-    d.text((180, 220), '82%', font=f2, fill=RED, anchor='mm')
+    d.text((180, 120), '利益率', font=f1, fill=DPINK, anchor='mm')
+    d.text((180, 220), '82%', font=f2, fill=DPINK, anchor='mm')
     return im.rotate(-12, resample=Image.BICUBIC)
 STAMP = make_stamp()
 
@@ -156,14 +180,14 @@ def profit_frame(t):
     card_s = pop(t, 0.15)
     if card_s > 0:
         card = Image.new('RGBA', (900, 560), (0, 0, 0, 0)); d = ImageDraw.Draw(card)
-        d.rounded_rectangle((0, 0, 899, 559), radius=40, fill=(255, 255, 255, 250))
+        d.rounded_rectangle((0, 0, 899, 559), radius=48, fill=(255, 255, 255, 250), outline=PINK, width=8)
         f = ImageFont.truetype(MARU, 54)
         for i, (lab, val, col) in enumerate(CARD_ROWS):
             a = min(1, max(0, (t - (0.35 + 0.28 * i)) / 0.2))
             if a <= 0: continue
             y = 80 + i * 118
             c = tuple(int(255 + (cc - 255) * a) for cc in col)
-            cl = tuple(int(255 + (cc - 255) * a) for cc in (80, 80, 90))
+            cl = tuple(int(255 + (cc - 255) * a) for cc in (130, 100, 115))
             d.text((60, y), lab, font=f, fill=cl, anchor='lm')
             d.text((840, y), val, font=f, fill=c, anchor='rm')
             if i < 3:
@@ -179,8 +203,33 @@ def profit_frame(t):
         place(fr, STAMP, 880, 1150, pop(t, 2.3, .3) * 0.85)
     return fr.convert('RGB')
 
+def float_hearts(fr, t, seed=0):
+    d = ImageDraw.Draw(fr); rng = np.random.default_rng(seed)
+    for k in range(9):
+        x = rng.uniform(60, W - 60); sp = rng.uniform(60, 120); ph = rng.uniform(0, H)
+        y = (ph - t * sp) % (H + 100) - 50; sz = rng.uniform(28, 52)
+        heart(d, x + 15 * np.sin(t * 2 + k), y, sz, (255, 150, 190, 200) if k % 2 else (255, 255, 255, 230))
+
+AHA_BG = None
+def aha_frame(t):
+    global AHA_BG
+    if AHA_BG is None: AHA_BG = polka()
+    fr = AHA_BG.copy().convert('RGBA')
+    float_hearts(fr, t, 2)
+    place(fr, AHA_1, W / 2, 470, pop(t, 0.0))
+    place(fr, AHA_2, W / 2, 640, pop(t, 0.15))
+    place(fr, AHA_3, W / 2, 900, pop(t, 0.9))
+    place(fr, AHA_4, W / 2, 1090, pop(t, 1.05))
+    if t > 1.3:
+        d = ImageDraw.Draw(fr)
+        for k, (x, y) in enumerate([(170, 1000), (910, 1010), (220, 1220), (860, 1210)]):
+            sc = pop(t, 1.3 + .08 * k) * (1 + .15 * np.sin(t * 8 + k))
+            sparkle(d, x, y, 34 * sc, (255, 210, 60))
+    return fr.convert('RGB')
+
 def end_frame(t):
     fr = END_BG.copy().convert('RGBA')
+    float_hearts(fr, t, 1)
     place(fr, END_T1, W / 2, 430, pop(t, 0.0))
     place(fr, END_T2, W / 2, 600, pop(t, 0.15))
     bob = 8 * np.sin(t * 5)
@@ -200,20 +249,23 @@ sold = fit_with_blur_bg(load('sold_blur.jpg'))
 calc = fit_with_blur_bg(load(U + '991801a5-image.jpg'))
 end = endcard()
 _bg = close_src.resize((W, W)).resize((W, H)).filter(ImageFilter.GaussianBlur(30))
-END_BG = Image.blend(_bg, Image.new('RGB', (W, H), (15, 35, 110)), 0.6)
-_r = ray_bg(c_top=(40, 90, 200), c_bot=(10, 30, 110), center=(W / 2, 620))
-END_BG = Image.blend(END_BG, _r, 0.35)
-END_T1 = pill('あなたの地元の', 60, (255, 255, 255), NAVY, pad=(50, 16))
+END_BG = Image.blend(_bg, polka(), 0.82)
+
+END_T1 = pill('あなたの地元の', 60, (255, 255, 255), TXT, pad=(50, 16))
 END_T2 = big_text('ご当地キティは？', 116)
-END_PILL = pill('コメントで教えてね', 62, (255, 255, 255), NAVY, icon=True)
+END_PILL = pill('コメントで教えてね', 62, (255, 255, 255), DPINK, icon=True)
 _f = close_src.crop((520, 280, 1220, 980)).resize((380, 380), Image.LANCZOS)
 _m = Image.new('L', (380, 380), 0); ImageDraw.Draw(_m).ellipse((0, 0, 379, 379), fill=255)
 END_FACE = Image.new('RGBA', (420, 420), (0, 0, 0, 0)); _d = ImageDraw.Draw(END_FACE)
-_d.ellipse((0, 0, 419, 419), fill=(255, 255, 255)); END_FACE.paste(_f, (20, 20), _m)
-END_FOLLOW = pill('フォローして次の仕入れも見てね', 50, RED, (255, 255, 255), pad=(56, 26))
+_d.ellipse((0, 0, 419, 419), fill=PINK); _d.ellipse((10, 10, 409, 409), fill=(255, 255, 255)); END_FACE.paste(_f, (20, 20), _m)
+END_FOLLOW = pill('フォローして次の仕入れも見てね', 50, DPINK, (255, 255, 255), pad=(56, 26))
 _nf = ImageFont.truetype(MARU, 48)
 END_NAME = Image.new('RGBA', (600, 90), (0, 0, 0, 0))
-ImageDraw.Draw(END_NAME).text((300, 45), '◆ ジャンク姉さん ◆', font=_nf, fill=(255, 255, 255), anchor='mm', stroke_width=5, stroke_fill=NAVY)
+ImageDraw.Draw(END_NAME).text((300, 45), '◆ ジャンク姉さん ◆', font=_nf, fill=(255, 255, 255), anchor='mm', stroke_width=5, stroke_fill=DPINK)
+AHA_1 = pill('知らなければ', 60, (255, 255, 255), (130, 100, 115), pad=(50, 16))
+AHA_2 = big_text('ただの330円', 120, grad=((255, 255, 255), (225, 220, 228), (170, 160, 175)), outline=(120, 100, 115))
+AHA_3 = pill('知っていれば', 60, DPINK, (255, 255, 255), pad=(50, 16))
+AHA_4 = big_text('5,980円に！', 150)
 
 # 写真の上での注目点（画面座標）: ズームの中心
 def to_screen(src_size, pt):
@@ -234,25 +286,26 @@ T_Y = 1180  # テロップの縦位置（画面の真ん中より少し下。Ins
 segs = [
     (0.0, 1.0, cover, 1.00, 1.04, (W/2, H/2), (W/2, H/2), None),
     (1.0, 4.0, shelf, 1.00, 1.45, (W/2, H/2), shelf_c,
-        bubble(['オフハウスの', 'ぬいぐるみのカゴで', 'わたし、うもれてたの'], 66), 1300),
-    (4.0, 6.5, close, 1.6, 2.3, tag_c, tag_c,
-        bubble(['お値段', '330円（税込）'], 70, accent=1), 1380),
-    (6.5, 8.5, close, 1.05, 1.25, (W/2, H/2), kitty_c,
-        bubble(['実はわたし', '函館の「イカ踊り」', 'ご当地キティなの'], 66, accent=1), 1380),
-    (8.5, 10.5, close, 1.25, 1.35, kitty_c, kitty_c,
-        bubble(['しかも', 'タグ付きの新品'], 70, accent=1), 1380),
-    (10.5, 12.7, close, 1.35, 1.7, kitty_c, gtag_c,
-        bubble(['キティはもともと大人気', 'しかもわたしは地域限定で', '今はもう売っていないの'], 56, accent=2), 1380),
-    (12.7, 15.0, shelf, 1.25, 1.1, shelf_c, (W/2, H/2),
-        bubble(['ご当地キーホルダーは', '安く置かれていることが多いけど', 'コレクターさんが探しているの'], 48, accent=2), 1300),
-    (15.0, 17.5, sold, 1.0, 1.12, (W/2, H/2), sold_c,
+        bubble(['オフハウスの', 'ぬいぐるみのカゴに', 'うもれてたの…'], 64), 1300),
+    (4.0, 6.3, close, 1.6, 2.3, tag_c, tag_c,
+        bubble(['お値段は', '330円'], 70, accent=1), 1380),
+    (6.3, 8.6, close, 1.05, 1.25, (W/2, H/2), kitty_c,
+        bubble(['でもね、実はわたし', '函館の“イカ踊り”キティ'], 62, accent=1), 1380),
+    (8.6, 10.6, close, 1.25, 1.35, kitty_c, kitty_c,
+        bubble(['函館でしか買えなくて', '今はもう売ってない', '廃盤品なの'], 60, accent=2), 1380),
+    (10.6, 12.6, close, 1.35, 1.7, kitty_c, gtag_c,
+        bubble(['だから全国の', 'コレクターさんが', '探してくれてるの'], 60, accent=1), 1380),
+    (12.6, 15.2, shelf, 1.25, 1.1, shelf_c, (W/2, H/2),
+        bubble(['ご当地キティは', 'リサイクルショップで', '安く置かれがちなんだよ'], 56, accent=2), 1300),
+    (15.2, 17.4, sold, 1.0, 1.12, (W/2, H/2), sold_c,
         bubble(['5,980円で', 'お嫁に行きました'], 70, accent=0), 1360),
-    (17.5, 18.7, calc, 1.0, 1.1, (W/2, H/2), calc_c,
-        bubble(['利益計算アプリで', '計算してみると…'], 60), 1380),
-    (18.7, 22.2, 'PROFIT'),
-    (22.2, 26.0, 'END'),
+    (17.4, 18.6, calc, 1.0, 1.1, (W/2, H/2), calc_c,
+        bubble(['利益を計算してみると…'], 58), 1380),
+    (18.6, 22.0, 'PROFIT'),
+    (22.0, 24.6, 'AHA'),
+    (24.6, 28.2, 'END'),
 ]
-TOTAL = 26.0
+TOTAL = 28.2
 XF = 0.18  # 切り替えのクロスフェード秒
 
 def ease(t):
@@ -261,6 +314,7 @@ def ease(t):
 def render_seg(seg, t):
     if seg[2] == 'PROFIT': return np.array(profit_frame(t - seg[0]))
     if seg[2] == 'END': return np.array(end_frame(t - seg[0]))
+    if seg[2] == 'AHA': return np.array(aha_frame(t - seg[0]))
     s0, s1, img, z0, z1, c0, c1, tel = seg[:8]
     ty = seg[8] if len(seg) > 8 else T_Y
     p = ease((t - s0) / (s1 - s0))
