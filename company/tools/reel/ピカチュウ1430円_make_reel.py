@@ -240,8 +240,48 @@ def end_frame(t):
     place(fr, END_NAME, W / 2, 1545, pop(t, 1.2))
     return fr.convert('RGB')
 
+
+# ---- 表紙の「売れた〇〇円」をポンと弾ませる（シリーズ共通） ----
+def find_sold_pill(cover_img):
+    """表紙の右下にある赤い「売れた」の枠を自動で見つけて切り抜く"""
+    im = cv2.cvtColor(np.array(cover_img), cv2.COLOR_RGB2BGR)
+    hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV); Hh, Ss, Vv = [c.astype(int) for c in cv2.split(hsv)]
+    red = (((Hh < 8) | (Hh > 172)) & (Ss > 150) & (Vv > 120)).astype(np.uint8)
+    red[:int(H * 0.78)] = 0; red[:, :int(W * 0.5)] = 0
+    n, lab, st, _ = cv2.connectedComponentsWithStats(red, 8)
+    if n < 2: return None
+    i = 1 + np.argmax(st[1:, 4])
+    m = (lab == i).astype(np.uint8)
+    cnts, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    f = np.zeros_like(m); cv2.drawContours(f, cnts, -1, 1, -1)
+    f = cv2.dilate(f, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25)))
+    x, y, w, h = cv2.boundingRect(f)
+    rgba = np.dstack([np.array(cover_img), cv2.GaussianBlur(f * 255, (5, 5), 0)])
+    return Image.fromarray(rgba[y:y + h, x:x + w].astype(np.uint8), 'RGBA'), (x + w / 2, y + h / 2)
+
+def cover_pop(fr, t):
+    """0.3秒でポンッと大きくなって戻り、キラッと光る"""
+    if SOLD_PILL is None: return fr
+    pill, (cx, cy) = SOLD_PILL
+    k = (t - 0.30) / 0.45
+    sc = 1 + 0.20 * np.sin(np.pi * k) if 0 <= k <= 1 else 1.0
+    if sc > 1.001:
+        e = pill.resize((int(pill.width * sc), int(pill.height * sc)), Image.LANCZOS)
+        cx = min(cx, W - e.width / 2 - 6)
+        sh = Image.new('RGBA', e.size, (0, 0, 0, 0)); sh.putalpha(e.split()[3].point(lambda v: v * 0.35))
+        fr.alpha_composite(sh, (int(cx - e.width / 2) + 6, int(cy - e.height / 2) + 12))
+        fr.alpha_composite(e, (int(cx - e.width / 2), int(cy - e.height / 2)))
+    if 0.45 <= t <= 1.4:
+        d = ImageDraw.Draw(fr); pw, ph = pill.size
+        for j, (dx, dy, d0) in enumerate([(-0.42, -0.45, 0.45), (0.46, -0.30, 0.6), (0.40, 0.48, 0.75)]):
+            a = (t - d0) / 0.5
+            if 0 <= a <= 1:
+                sparkle(d, cx + dx * pw, cy + dy * ph, 46 * np.sin(np.pi * a), (255, 240, 120))
+    return fr
+
 # ---- 素材 ----
 cover = load(U + 'e67f51f0-image.png').resize((W, H), Image.LANCZOS)
+SOLD_PILL = find_sold_pill(cover)
 shelf = fit_with_blur_bg(load(U + '1d300ca2-image.jpg'))
 close_src = load(U + '1d300ca2-image.jpg')
 close = fit_with_blur_bg(close_src)
@@ -341,6 +381,8 @@ def render_seg(seg, t):
     l = min(max(cx - cw / 2, 0), W - cw)
     tp = min(max(cy - ch / 2, 0), H - ch)
     fr = img.resize((W, H), Image.BICUBIC, box=(l, tp, l + cw, tp + ch))
+    if img is cover:
+        fr = cover_pop(fr.convert('RGBA'), t - s0).convert('RGB')
     if tel is not None:
         k = min(1, (t - s0) / 0.25)  # テロップは少しはずんで出る
         sc = 0.85 + 0.15 * ease(k)
