@@ -247,6 +247,7 @@ close_src = load(U + '1d300ca2-image.jpg')
 close = fit_with_blur_bg(close_src)
 sold = fit_with_blur_bg(load('pika_sold_blur.jpg'))
 calc = fit_with_blur_bg(load(U + 'd7af1913-image.jpg'))
+tagimg = fit_with_blur_bg(load(U + 'adfafa3e-image.jpg'))
 end = endcard()
 _bg = close_src.resize((W, W)).resize((W, H)).filter(ImageFilter.GaussianBlur(30))
 END_BG = Image.blend(_bg, polka(), 0.82)
@@ -293,6 +294,7 @@ face_c = to_screen((1170, 1170), (585, 640))      # 顔
 body_c = to_screen((1170, 1170), (560, 800))      # ぽってりボディ
 sold_c = to_screen((981, 1393), (490, 420))
 calc_c = to_screen((1091, 1499), (546, 1300))     # 利益の行
+logo_c = to_screen((927, 927), (380, 420))         # TOMYの赤い文字
 
 T_Y = 1180  # テロップの縦位置（画面の真ん中より少し下。Instagramの文字やボタンに隠れない）
 
@@ -305,19 +307,21 @@ segs = [
         bubble(['お値段は', '1,430円'], 70, accent=1), 1380),
     (6.5, 9.0, close, 1.3, 1.7, shelf_c, face_c,
         bubble(['でもね、実はぼく', '赤いタグの', '初期のピカチュウ'], 62, accent=2), 1420),
-    (9.0, 11.4, close, 1.4, 1.6, body_c, body_c,
+    (9.0, 11.8, tagimg, 1.0, 1.35, (W/2, H/2), logo_c,
+        bubble(['目印は', '赤い文字の「TOMY」タグ', 'これが“赤タグ”だよ'], 58, accent=1), 1420),
+    (11.8, 14.2, close, 1.4, 1.6, body_c, body_c,
         bubble(['昔のピカチュウは', 'まるくて ぽってり', 'してたんだよ'], 62, accent=1), 1420),
-    (11.4, 13.8, close, 1.6, 1.2, face_c, (W/2, H/2),
+    (14.2, 16.6, close, 1.6, 1.2, face_c, (W/2, H/2),
         bubble(['当時ものは', 'ファンやコレクターさんに', 'ずっと人気なんだ'], 56, accent=2), 1420),
-    (13.8, 16.2, sold, 1.0, 1.12, (W/2, H/2), sold_c,
+    (16.6, 19.0, sold, 1.0, 1.12, (W/2, H/2), sold_c,
         bubble(['8,700円で', '新しいおうちへ'], 70, accent=0), 1300),
-    (16.2, 17.4, calc, 1.0, 1.1, (W/2, H/2), calc_c,
+    (19.0, 20.2, calc, 1.0, 1.1, (W/2, H/2), calc_c,
         bubble(['利益を計算してみると…'], 58), 1380),
-    (17.4, 20.8, 'PROFIT'),
-    (20.8, 23.4, 'AHA'),
-    (23.4, 27.0, 'END'),
+    (20.2, 23.6, 'PROFIT'),
+    (23.6, 26.2, 'AHA'),
+    (26.2, 29.8, 'END'),
 ]
-TOTAL = 27.0
+TOTAL = 29.8
 XF = 0.18  # 切り替えのクロスフェード秒
 
 def ease(t):
