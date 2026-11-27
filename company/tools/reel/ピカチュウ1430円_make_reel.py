@@ -219,7 +219,7 @@ def aha_frame(t):
     place(fr, AHA_1, W / 2, 470, pop(t, 0.0))
     place(fr, AHA_2, W / 2, 640, pop(t, 0.15))
     place(fr, AHA_3, W / 2, 900, pop(t, 0.9))
-    place(fr, AHA_4, W / 2, 1090, pop(t, 1.05))
+    place(fr, AHA_4, W / 2, 1110, pop(t, 1.05) * (1 + 0.04 * np.sin(max(0, t - 1.4) * 9)))
     if t > 1.3:
         d = ImageDraw.Draw(fr)
         for k, (x, y) in enumerate([(170, 1000), (910, 1010), (220, 1220), (860, 1210)]):
@@ -241,7 +241,7 @@ def end_frame(t):
     return fr.convert('RGB')
 
 # ---- 素材 ----
-cover = load(U + 'f90abf0a-image.png').resize((W, H), Image.LANCZOS)
+cover = load(U + 'ddac4448-image.png').resize((W, H), Image.LANCZOS)
 shelf = fit_with_blur_bg(load(U + '1d300ca2-image.jpg'))
 close_src = load(U + '1d300ca2-image.jpg')
 close = fit_with_blur_bg(close_src)
@@ -265,7 +265,22 @@ ImageDraw.Draw(END_NAME).text((300, 45), '◆ ジャンク姉さん ◆', font=_
 AHA_1 = pill('おなじピカチュウに見えても', 58, (255, 255, 255), TXT, pad=(50, 16))
 AHA_2 = big_text('値段はぜんぜん違う', 100, grad=((255, 255, 255), (240, 236, 225), (200, 190, 170)), outline=TXT)
 AHA_3 = pill('初期のぼくは', 60, RED, (255, 255, 255), pad=(50, 16))
-AHA_4 = big_text('価値 約6倍！', 150)
+def _six():
+    a = big_text('価値 約', 120)
+    b = big_text('6', 300, grad=((230, 0, 30), (230, 0, 30), (230, 0, 30)), outline=(255, 255, 255))
+    c = big_text('倍！', 150)
+    gap = -6
+    w = a.width + b.width + c.width + gap * 2
+    h = b.height
+    im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    base = int(h * 0.86)
+    im.alpha_composite(a, (0, h - a.height - 22))
+    im.alpha_composite(b, (a.width + gap, 0))
+    im.alpha_composite(c, (a.width + b.width + gap * 2, h - c.height - 22))
+    if w > W - 40:
+        im = im.resize((W - 40, int(h * (W - 40) / w)), Image.LANCZOS)
+    return im
+AHA_4 = _six()
 
 # 写真の上での注目点（画面座標）: ズームの中心
 def to_screen(src_size, pt):
