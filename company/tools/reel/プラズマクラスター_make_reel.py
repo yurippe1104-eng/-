@@ -37,11 +37,15 @@ def fit_with_blur_bg(img):
     return bg
 
 
+DELA = 'dela-ja.ttf'
+
 def bubble(lines, size=70, accent=None):
     """aiboのときと同じ、白い吹き出しのテロップ（accent の行は赤で大きく）"""
     f = ImageFont.truetype(MARU, size)
     fa = ImageFont.truetype(MARU, int(size * 1.35))
-    fonts = [fa if i == accent else f for i in range(len(lines))]
+    fn = ImageFont.truetype(DELA, int(size * 1.75))
+    import re as _re
+    fonts = [fn if _re.search(r'[0-9０-９]', t) else (fa if i == accent else f) for i, t in enumerate(lines)]
     d0 = ImageDraw.Draw(Image.new('RGB', (1, 1)))
     sizes = [d0.textbbox((0, 0), t, font=fo) for t, fo in zip(lines, fonts)]
     tw = max(b[2] - b[0] for b in sizes)
@@ -58,7 +62,10 @@ def bubble(lines, size=70, accent=None):
     y = 6 + 45
     for t, fo, b, h_ in zip(lines, fonts, sizes, lh):
         x = 6 + (bw - (b[2] - b[0])) // 2 - b[0]
-        d.text((x, y - b[1]), t, font=fo, fill=DPINK if fo is fa else TXT)
+        if fo is fn:
+            d.text((x, y - b[1]), t, font=fo, fill=RED, stroke_width=3, stroke_fill=(255, 255, 255))
+        else:
+            d.text((x, y - b[1]), t, font=fo, fill=DPINK if fo is fa else TXT)
         y += h_ + gap
     sparkle(d, bw - 4, 22, 30, (255, 190, 0))
     sparkle(d, 30, bh - 4, 18, (255, 225, 120))
@@ -182,6 +189,7 @@ def profit_frame(t):
         card = Image.new('RGBA', (900, 560), (0, 0, 0, 0)); d = ImageDraw.Draw(card)
         d.rounded_rectangle((0, 0, 899, 559), radius=48, fill=(255, 255, 255, 250), outline=PINK, width=8)
         f = ImageFont.truetype(MARU, 54)
+        fv = ImageFont.truetype(DELA, 66)
         for i, (lab, val, col) in enumerate(CARD_ROWS):
             a = min(1, max(0, (t - (0.35 + 0.28 * i)) / 0.2))
             if a <= 0: continue
@@ -189,7 +197,7 @@ def profit_frame(t):
             c = tuple(int(255 + (cc - 255) * a) for cc in col)
             cl = tuple(int(255 + (cc - 255) * a) for cc in (130, 100, 115))
             d.text((60, y), lab, font=f, fill=cl, anchor='lm')
-            d.text((840, y), val, font=f, fill=c, anchor='rm')
+            d.text((840, y), val, font=fv, fill=c, anchor='rm')
             if i < 3:
                 d.line((60, y + 59, 840, y + 59), fill=(225, 225, 232), width=3)
         place(fr, card, W / 2, 780, card_s)
@@ -233,16 +241,18 @@ def open_frame(t):
     cx, cy = shelf_c
     l = min(max(cx - cw / 2, 0), W - cw); tp = min(max(cy - ch / 2, 0), H - ch)
     fr = shelf.resize((W, H), Image.BICUBIC, box=(l, tp, l + cw, tp + ch)).convert('RGBA')
-    place(fr, OPEN_STORE, W / 2, 250, pop(t, 0.0, .25))
-    place(fr, OPEN_A, W / 2, 400, pop(t, 0.05, .25))
+    place(fr, OPEN_STORE, W / 2, 210, pop(t, 0.0, .25))
+    place(fr, OPEN_A, W / 2, 370, pop(t, 0.05, .25))
+    place(fr, OPEN_A2, W / 2, 520, pop(t, 0.1, .25))
     k = (t - 0.30) / 0.45
     bump = 1 + 0.18 * np.sin(np.pi * k) if 0 <= k <= 1 else 1.0
-    place(fr, OPEN_B, W / 2, 1360, pop(t, 0.25, .3) * bump)
+    place(fr, OPEN_B, W / 2, 1300, pop(t, 0.25, .3) * bump)
+    place(fr, OPEN_B2, W / 2, 1480, pop(t, 0.35, .3))
     if 0.45 <= t <= 1.5:
         d = ImageDraw.Draw(fr)
         for j, (dx, dy, d0) in enumerate([(-420, -110, .45), (430, -90, .6), (400, 110, .75)]):
             a = (t - d0) / .5
-            if 0 <= a <= 1: sparkle(d, W / 2 + dx, 1360 + dy, 50 * np.sin(np.pi * a), (255, 240, 120))
+            if 0 <= a <= 1: sparkle(d, W / 2 + dx, 1300 + dy, 50 * np.sin(np.pi * a), (255, 240, 120))
     return fr.convert('RGB')
 
 def end_frame(t):
@@ -324,11 +334,13 @@ ImageDraw.Draw(END_NAME).text((300, 45), '◆ ジャンク姉さん ◆', font=_
 def fitw(im, mw=W - 70):
     return im if im.width <= mw else im.resize((mw, int(im.height * mw / im.width)), Image.LANCZOS)
 OPEN_STORE = pill('リサイクルショップの家電コーナー', 50, (255, 255, 255), TXT, pad=(46, 14))
-OPEN_A = fitw(big_text('2,090円のこれ、なに？', 104, grad=((255, 255, 255), (240, 240, 240), (215, 215, 215)), outline=TXT))
-OPEN_B = fitw(big_text('12,800円で売れた！', 128, grad=((255, 235, 235), (240, 30, 50), (190, 0, 20)), outline=(255, 255, 255)))
+OPEN_A = big_text('2,090円', 190, grad=((255, 255, 255), (245, 245, 245), (220, 220, 220)), outline=TXT)
+OPEN_A2 = pill('のこれ、なに？', 64, (255, 255, 255), TXT, pad=(50, 16))
+OPEN_B = fitw(big_text('12,800円', 250, grad=((255, 235, 235), (240, 30, 50), (190, 0, 20)), outline=(255, 255, 255)))
+OPEN_B2 = pill('で売れた！', 70, RED, (255, 255, 255), pad=(56, 18))
 AHA_1 = pill('ぱっと見は ただの白い筒', 58, (255, 255, 255), TXT, pad=(50, 16))
 AHA_2 = big_text('でも正体を知ってたら', 96, grad=((255, 255, 255), (240, 236, 225), (200, 190, 170)), outline=TXT)
-AHA_3 = pill('2,090円が', 60, RED, (255, 255, 255), pad=(50, 16))
+AHA_3 = pill('2,090円が', 80, RED, (255, 255, 255), pad=(50, 16))
 def _six():
     a = big_text('価値 約', 120)
     b = big_text('6', 300, grad=((230, 0, 30), (230, 0, 30), (230, 0, 30)), outline=(255, 255, 255))
@@ -362,12 +374,21 @@ calc_c = to_screen((1091, 1499), (546, 1300))
 T_Y = 1180  # テロップの縦位置（画面の真ん中より少し下。Instagramの文字やボタンに隠れない）
 
 # (開始秒, 終了秒, 画像, ズーム開始, ズーム終了, 中心開始, 中心終了, テロップ)
+def money_label(num, sub):
+    a = big_text(num, 210, grad=((255, 235, 235), (240, 30, 50), (190, 0, 20)), outline=(255, 255, 255))
+    b = pill(sub, 66, RED, (255, 255, 255), pad=(54, 16))
+    im = Image.new('RGBA', (max(a.width, b.width), a.height + b.height - 20), (0, 0, 0, 0))
+    im.alpha_composite(a, ((im.width - a.width) // 2, 0))
+    im.alpha_composite(b, ((im.width - b.width) // 2, a.height - 20))
+    return fitw(im)
+SOLD_LABEL = money_label('12,800円', '売れました！')
+
 segs = [
     (0.0, 1.5, 'OPEN'),
     (1.5, 4.0, close, 1.3, 2.0, shelf_c, top_c,
         bubble(['上は電球のねじ…', 'でも', '電球じゃないんです'], 62, accent=2), 1420),
     (4.0, 6.2, close, 1.9, 2.4, tag_c, tag_c,
-        bubble(['お値段は', '2,090円（税込）'], 68, accent=1), 1420),
+        bubble(['お値段は', '2,090円', '（税込）'], 64), 1420),
     (6.2, 8.8, close, 1.4, 1.9, logo_c, logo_c,
         bubble(['正体は', 'シャープの', '「プラズマクラスター」'], 62, accent=2), 1420),
     (8.8, 11.4, close, 1.9, 1.5, top_c, shelf_c,
@@ -375,7 +396,7 @@ segs = [
     (11.4, 13.6, close, 1.5, 1.35, shelf_c, shelf_c,
         bubble(['この形を', '探している人がいて', '知らないと見逃しちゃう'], 58, accent=2), 1420),
     (13.6, 15.8, sold, 1.0, 1.12, (W/2, H/2), sold_c,
-        bubble(['12,800円で', '売れました！'], 68, accent=0), 1300),
+        SOLD_LABEL, 1330),
     (15.8, 19.2, 'PROFIT'),
     (19.2, 21.8, 'AHA'),
     (21.8, 25.2, 'END'),
