@@ -426,10 +426,10 @@ def render_seg(seg, t):
     fr = img.resize((W, H), Image.BICUBIC, box=(l, tp, l + cw, tp + ch))
     if img is cover:
         fr = cover_pop(fr.convert('RGBA'), t - s0).convert('RGB')
-    if seg[0] == 1.5:
+    if 1.5 <= seg[0] < 11.4:
         fr = fr.convert('RGBA')
-        bob = 6 * np.sin((t - s0) * 6)
-        place(fr, ASK_P, W / 2, 300 + bob, pop(t - s0, 0.2))
+        bob = 6 * np.sin((t - 1.5) * 6)
+        place(fr, ASK_P, W / 2, 300 + bob, pop(t - 1.5, 0.2))
         fr = fr.convert('RGB')
     if tel is not None:
         k = min(1, (t - s0) / 0.25)  # テロップは少しはずんで出る
