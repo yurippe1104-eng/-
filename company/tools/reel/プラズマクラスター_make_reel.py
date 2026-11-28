@@ -374,6 +374,8 @@ calc_c = to_screen((1091, 1499), (546, 1300))
 T_Y = 1180  # テロップの縦位置（画面の真ん中より少し下。Instagramの文字やボタンに隠れない）
 
 # (開始秒, 終了秒, 画像, ズーム開始, ズーム終了, 中心開始, 中心終了, テロップ)
+ASK_P = pill('なにか分かった人は コメントしてね', 52, RED, (255, 255, 255), icon=True)
+
 def money_label(num, sub):
     a = big_text(num, 210, grad=((255, 235, 235), (240, 30, 50), (190, 0, 20)), outline=(255, 255, 255))
     b = pill(sub, 66, RED, (255, 255, 255), pad=(54, 16))
@@ -424,6 +426,11 @@ def render_seg(seg, t):
     fr = img.resize((W, H), Image.BICUBIC, box=(l, tp, l + cw, tp + ch))
     if img is cover:
         fr = cover_pop(fr.convert('RGBA'), t - s0).convert('RGB')
+    if seg[0] == 1.5:
+        fr = fr.convert('RGBA')
+        bob = 6 * np.sin((t - s0) * 6)
+        place(fr, ASK_P, W / 2, 300 + bob, pop(t - s0, 0.2))
+        fr = fr.convert('RGB')
     if tel is not None:
         k = min(1, (t - s0) / 0.25)  # テロップは少しはずんで出る
         sc = 0.85 + 0.15 * ease(k)
